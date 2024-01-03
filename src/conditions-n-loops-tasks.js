@@ -123,8 +123,37 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const onesNum = num % 10;
+  const tensNum = (num - onesNum) / 10;
+  let romanNum = '';
+
+  for (let i = 0; i < tensNum; i += 1) {
+    romanNum += 'X';
+  }
+
+  if (onesNum === 4) {
+    romanNum += 'IV';
+    return romanNum;
+  }
+
+  if (onesNum === 9) {
+    romanNum += 'IX';
+    return romanNum;
+  }
+
+  const remainderOnesNumFives = onesNum % 5;
+  const onesNumFives = (onesNum - remainderOnesNumFives) / 5;
+
+  if (onesNumFives === 1) {
+    romanNum += 'V';
+  }
+
+  for (let i = 0; i < remainderOnesNumFives; i += 1) {
+    romanNum += 'I';
+  }
+
+  return romanNum;
 }
 
 /**
@@ -259,8 +288,21 @@ function getIndexOf(str, letter) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  let remainingNum = num;
+  let remainder;
+
+  while (remainingNum !== 0) {
+    remainder = remainingNum % 10;
+
+    if (remainder === digit) {
+      return true;
+    }
+
+    remainingNum = (remainingNum - remainder) / 10;
+  }
+
+  return false;
 }
 
 /**
@@ -276,8 +318,26 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  for (let i = 1; i < arr.length - 1; i += 1) {
+    const balanceElement = i;
+    let leftSum = 0;
+    let rightSum = 0;
+
+    for (let l = 0; l < balanceElement; l += 1) {
+      leftSum += arr[l];
+    }
+
+    for (let r = balanceElement + 1; r < arr.length; r += 1) {
+      rightSum += arr[r];
+    }
+
+    if (leftSum === rightSum) {
+      return balanceElement;
+    }
+  }
+
+  return -1;
 }
 
 /**
@@ -338,8 +398,22 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const sortedArr = arr;
+  let isSwapped = true;
+
+  while (isSwapped) {
+    isSwapped = false;
+
+    for (let i = 0; i < sortedArr.length - 1; i += 1) {
+      if (sortedArr[i] > sortedArr[i + 1]) {
+        [sortedArr[i], sortedArr[i + 1]] = [sortedArr[i + 1], sortedArr[i]];
+        isSwapped = true;
+      }
+    }
+  }
+
+  return sortedArr;
 }
 
 /**
