@@ -74,8 +74,16 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  if (
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -454,8 +462,77 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+
+// number => [arr] = [head arr | tail arr]
+
+function getNearestBigger(number) {
+  const arr = [];
+  let remainder;
+  let remainingNum = number;
+
+  while (remainingNum !== 0) {
+    remainder = remainingNum % 10;
+    arr.unshift(remainder);
+    remainingNum = (remainingNum - remainder) / 10;
+  }
+
+  let index = arr.length - 1;
+
+  while (arr[index] <= arr[index - 1] && index > 0) {
+    index -= 1;
+  }
+  if (index === 0) {
+    return number;
+  }
+  const tailFirstIndex = index;
+
+  function sliceArray(array, startIndex, endIndex) {
+    const slicedArr = [];
+    for (let i = startIndex; i < endIndex; i += 1) {
+      slicedArr.push(array[i]);
+    }
+    return slicedArr;
+  }
+
+  const headArr = sliceArray(arr, 0, tailFirstIndex);
+  const tailArr = sliceArray(arr, tailFirstIndex, arr.length);
+
+  const headLastIndex = tailFirstIndex - 1;
+  const headNumToSwap = arr[headLastIndex];
+
+  let tailNumToSwapIndex = 0;
+  const tailNumToSwap = tailArr[tailNumToSwapIndex];
+
+  for (let i = 1; i < tailArr.length; i += 1) {
+    if (tailArr[i] > headNumToSwap && tailArr[i] < tailNumToSwap) {
+      tailNumToSwapIndex = i;
+    }
+  }
+
+  [headArr[headLastIndex], tailArr[tailNumToSwapIndex]] = [
+    tailArr[tailNumToSwapIndex],
+    headArr[headLastIndex],
+  ];
+
+  tailArr.sort((a, b) => a - b);
+
+  const newArr = headArr;
+  const tailLength = tailArr.length;
+
+  for (let i = 0; i < tailLength; i += 1) {
+    newArr.push(tailArr.shift());
+  }
+
+  let biggerNum = '';
+  const newArrLength = newArr.length;
+
+  for (let i = 0; i < newArrLength; i += 1) {
+    biggerNum += newArr.shift();
+  }
+
+  biggerNum = +biggerNum;
+
+  return biggerNum;
 }
 
 module.exports = {
