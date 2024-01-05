@@ -446,6 +446,8 @@ function shuffleChar(str, iterations) {
   let previousStr = '';
   let oddStr = '';
   let evenStr = '';
+  const cash = {};
+  let cashStep = 0;
 
   for (let j = 0; j < iterations; j += 1) {
     previousStr = currentStr;
@@ -453,16 +455,24 @@ function shuffleChar(str, iterations) {
     oddStr = '';
     evenStr = '';
 
-    for (let i = 0; i < previousStr.length; i += 1) {
-      if (i % 2 === 0) {
-        evenStr += previousStr[i];
+    if (cashStep) {
+      currentStr = cash[j % cashStep];
+    } else {
+      for (let i = 0; i < previousStr.length; i += 1) {
+        if (i % 2 === 0) {
+          evenStr += previousStr[i];
+        }
+        if (i % 2 === 1) {
+          oddStr += previousStr[i];
+        }
       }
-      if (i % 2 === 1) {
-        oddStr += previousStr[i];
-      }
+      currentStr = evenStr + oddStr;
+      cash[j] = currentStr;
     }
 
-    currentStr = evenStr + oddStr;
+    if (!cashStep && currentStr === str) {
+      cashStep = j + 1;
+    }
   }
   return currentStr;
 }
